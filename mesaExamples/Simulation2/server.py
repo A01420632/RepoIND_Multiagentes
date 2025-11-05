@@ -64,5 +64,5 @@ page = SolaraViz(
     gof_model,
     components=[space_component],
     model_params=model_params,
-    name="Game of Life",
+    name="Simulación 2",
 )

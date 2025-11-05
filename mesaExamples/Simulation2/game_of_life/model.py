@@ -23,6 +23,11 @@ class ConwaysGameOfLife(Model):
 
         # Place a cell at each location, with some initialized to
         # ALIVE and some to DEAD.
+
+        #Para la segunda simulacion, lo regrese a como lo teniamos en un inicio
+        #Esto es porque estas condiciones establecen agentes vivos aleatoriamente
+        #dentro del rango del initial_fraction_alive
+        #Los demas los establece como muertos
         for cell in self.grid.all_cells:
             Cell(
                 self,

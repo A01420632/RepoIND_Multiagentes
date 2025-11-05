@@ -27,6 +27,8 @@ class Cell(FixedAgent):
     def neighbors(self):
         return self.cell.neighborhood.agents
     
+    #En esta seccion inicialice una propiedad con al definicion de upneighbors
+    #Lo que hice fue implementar un sistema dinamico que se base en la altura y el ancho del canvas
     @property
     def upneighbors(self):
         x=self.x
@@ -34,11 +36,16 @@ class Cell(FixedAgent):
         width=self.model.grid.dimensions[0]
         height=self.model.grid.dimensions[1]
 
+        #Despues defini un arreglo de los agentes de arriba, a traves del uso del modulo
+        #Lo que hace es que usa los modulos para ajustar de 50 a 0, tanto en x como y
+        #Esto es porque, cuando uno de los agentes de arriba supera los limites, se tiene que reflejar al otro lado
         pos_arriba=[
             ((x-1) % width, (y+1) % height),
             (x % width, (y+1) % height),
             ((x+1) % width, (y+1) % height)
         ]
+
+        #Se que estas funciones no se utilizaron, pero quiero guardar esta logica para futuras referencias
 
         # if self.x==0:
         #     pos_arriba=[(x,y+1),(49,y+1),(x+1,y+1)]
@@ -58,6 +65,8 @@ class Cell(FixedAgent):
         # else:
         #     pos_arriba=[(x,y+1),(x-1,y+1),(x+1,y+1)]
 
+        #Posteriormente, genero una lista de los agentes de arriba,
+        #a la que le agrego lo sresultados de las operaciones anteriores a traves de un ciclo for
         upneighbors_list=[]
         for pos in pos_arriba:
             cell=self.model.grid[pos]
@@ -86,6 +95,9 @@ class Cell(FixedAgent):
         # at the next tick.
         #live_neighbors = sum(neighbor.is_alive for neighbor in self.neighbors)
         
+        # Mantiene el estado de la fila superior (y=49) sin cambios.
+        # Esta fila actúa como la generación inicial
+        # y no debe actualizarse en los pasos siguientes. 
         if self.y == self.model.grid.dimensions[1] - 1:
             self._next_state = self.state
             return
@@ -93,6 +105,9 @@ class Cell(FixedAgent):
         # Assume nextState is unchanged, unless changed below.
         self._next_state = self.state
 
+        #Posteriormente, tengo una logica en la cual valido cada uno de los estados de los agentes de arriba
+        #A partir de esas comprobaciones, asigno el estado del agente
+        #Tengo if's anidados porque parto de que en algunas comprobaciones, el primer bit es 0, y ya de ahi evaluo el resto
         if self.upneighbors[0].is_alive and self.upneighbors[1].is_alive and self.upneighbors[2].is_alive:
             self._next_state = self.DEAD
         elif self.upneighbors[0].is_dead and self.upneighbors[1].is_dead and self.upneighbors[2].is_dead:
