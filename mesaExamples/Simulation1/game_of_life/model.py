@@ -21,18 +21,19 @@ class ConwaysGameOfLife(Model):
         """
         self.grid = OrthogonalMooreGrid((width, height), capacity=1, torus=True)
 
-        # Place a cell at each location, with some initialized to
-        # ALIVE and some to DEAD.
+        #Para esta primera simulacion, lo que hice fue limitar la inicializacion aleatoria de los agentes a vivo, 
+        #SOLO en la primera fila
         for cell in self.grid.all_cells:
             if cell.coordinate[1]==49:
                 Cell(
                     self,
                     cell,
                     init_state=(
+                        #Inicializa agentes con estado vivo, evitando superar el limite de initial_fraction
                         Cell.ALIVE if self.random.random() < initial_fraction_alive else Cell.DEAD
                     ),
                 )
-            else:
+            else: #Los demas agentes los establece como muertos (los que no son de la primera fila)
                 Cell(
                     self,
                     cell,
